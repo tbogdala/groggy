@@ -10,11 +10,7 @@ as a parameter.
 
 ```go
 groggy.Register("DEBUG", nil)
-err := groggy.Log("DEBUG", "This is a test of: ", "Hello World!")
-if err != nil {
-  panic()
-}
-groggy.Deregister("DEBUG")
+groggy.Log("DEBUG", "This is a test of: ", "Hello World!")
 ```
 
 This will output something like:
@@ -53,19 +49,19 @@ import "github.com/tbogdala/groggy"
 Usage
 -----
 
-Two basic steps are required ot use this package:
+Two basic steps are required to use this package:
 
 1. Call Register() with a log name and an optional function to handle the log events.
 2. Call Log() with this log name and the data objects to log
 
 If no optional log handlers are supplied, the default handler writes the data
-objects out to stdout using fmt.Print(). To do this, the objects should be
-strings or implement the fmt.Stringer interface.
+objects out to stdout using `fmt.Print()`. To do this, the objects should be
+strings or implement the `fmt.Stringer` interface.
 
-If Log() is called with a log name that is not registered, it will not be able
+If `Log()` is called with a log name that is not registered, it will not be able
 to call a handler, and an error will be returned.
 
-Clients can call Deregister() to remove a log handler.
+Clients can call `Deregister()` to remove a log handler.
 
 Besides the basic `DefaultHandler` function, a `DefaultSyncHandler` function
 is supplied as a drop-in replacement that locks a mutex during writes as
