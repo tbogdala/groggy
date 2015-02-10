@@ -5,11 +5,10 @@ package groggy
 
 import (
 	"fmt"
-	"testing"
 	"sync"
+	"testing"
 	"time"
 )
-
 
 func TestDefaultLogger(t *testing.T) {
 	// use the default handler
@@ -18,7 +17,25 @@ func TestDefaultLogger(t *testing.T) {
 	// send a test message
 	err := Log("defaultTest", "This is a test of: ", "Hello World!")
 	if err != nil {
-		t.Log("Log failed when it shouldn't have.\n")
+		t.Log("Log failed when it shouldn't have.\n", err)
+		t.Fail()
+	}
+
+	err = Logsf("defaultTest", "This has %d %s insde.", 1, "embedded string")
+	if err != nil {
+		t.Log("Log failed when it shouldn't have.\n", err)
+		t.Fail()
+	}
+
+	err = Logsf("defaultTest", "The correct answer is: %d", 42)
+	if err != nil {
+		t.Log("Log failed when it shouldn't have.\n", err)
+		t.Fail()
+	}
+
+	err = Logsf("defaultTest", 2, "This has %d %s insde.", 1, "embedded string")
+	if err == nil {
+		t.Log("Log didn't fail when it should have due to a non-format string.\n", err)
 		t.Fail()
 	}
 
@@ -32,7 +49,7 @@ func TestDefaultSyncLogger(t *testing.T) {
 	var wg sync.WaitGroup
 
 	// send a test message
-	for i:=0; i<42; i++ {
+	for i := 0; i < 42; i++ {
 		wg.Add(1)
 		go func(i int) {
 			Log("SYNC", fmt.Sprintf("This is a synchronized test number %d!", i))
@@ -52,14 +69,13 @@ func TestNoLogger(t *testing.T) {
 	// send a test message
 	err := Log("NOT_THERE", "This is a test of: ", "Hello World!")
 	if err == nil {
-		t.Log("Log() should have failed with a non-registered log name.\n")
+		t.Log("Log() should have failed with a non-registered log name.\n", err)
 		t.Fail()
 	}
 
 	// remove the handler
 	Deregister("defaultTest")
 }
-
 
 type EventTest struct {
 	Data int
@@ -74,12 +90,11 @@ func LogEventHandler(logName string, data ...interface{}) error {
 		case *EventTest:
 			fmt.Printf("%s %s: %s %d\n", now.Format(layout), logName, dt.Desc, dt.Data)
 		default:
-			fmt.Printf("<unknown log data type %v>",dt)
+			fmt.Printf("<unknown log data type %v>", dt)
 		}
 	}
 	return nil
 }
-
 
 func TestEventLogger(t *testing.T) {
 	// use the default handler

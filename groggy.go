@@ -73,12 +73,12 @@ func DefaultHandler(logName string, data ...interface{}) error {
 	fmt.Printf("%s %s: ", now.Format(layout), logName)
 	for _, ds := range data {
 		switch v := ds.(type) {
-			case string:
-				fmt.Print(v)
-			case fmt.Stringer:
-				fmt.Print(v.String())
-			default:
-				fmt.Printf("<unknown log data type %v>",ds)
+		case string:
+			fmt.Print(v)
+		case fmt.Stringer:
+			fmt.Print(v.String())
+		default:
+			fmt.Printf("<unknown log data type %v>", ds)
 		}
 	}
 	fmt.Print("\n")
@@ -104,4 +104,19 @@ func Log(logName string, data ...interface{}) error {
 	}
 
 	return h(logName, data...)
+}
+
+func Logsf(logName string, data ...interface{}) error {
+	h, okay := handlers[logName]
+	if okay == false {
+		return fmt.Errorf("No log handler found for %s.", logName)
+	}
+
+	sprintStr, okay := data[0].(string)
+	if okay == false {
+		return fmt.Errorf("A format string was not passed as the second parameter.")
+	}
+
+	s := fmt.Sprintf(sprintStr, data[1:]...)
+	return h(logName, s)
 }

@@ -11,12 +11,14 @@ as a parameter.
 ```go
 groggy.Register("DEBUG", nil)
 groggy.Log("DEBUG", "This is a test of: ", "Hello World!")
+groggy.Logsf("DEBUG", "The correct answer is: %d", 42)
 ```
 
 This will output something like:
 
 ```bash
 14:32:07.197 DEBUG: This is a test of: Hello World!
+14:32:07.197 DEBUG: The correct answer is: 42
 ```
 
 Groggy manages a non-exported map that will be used to dispatch events to
