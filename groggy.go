@@ -106,6 +106,9 @@ func Log(logName string, data ...interface{}) error {
 	return h(logName, data...)
 }
 
+// Logsf uses the second parameter as the format string for fmt.Spritnf and
+// then sends the rest of the parameters to it. The resulting string is then
+// passed to the handler specified by logName.
 func Logsf(logName string, data ...interface{}) error {
 	h, okay := handlers[logName]
 	if okay == false {
