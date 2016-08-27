@@ -1,5 +1,5 @@
-groggy: a simple Go library creating custom logging routines
-============================================================
+Groggy v1.0.0
+=============
 
 Groggy is a library that makes it easier to setup custom
 logging channels.
